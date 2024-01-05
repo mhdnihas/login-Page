@@ -1,0 +1,467 @@
+{% comment %} {% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Design by foolishdeveloper.com -->
+    <title>Signup Page</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <!--Stylesheet-->
+    <style media="screen">
+      *,
+*:before,
+*:after{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: #080710;
+}
+.background{
+    width: 430px;
+    height: 520px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top: 50%;
+}
+.background .shape{
+    height: 200px;
+    width: 200px;
+    position: absolute;
+    border-radius: 50%;
+}
+.shape:first-child{
+    background: linear-gradient(
+        #1845ad,
+        #23a2f6
+    );
+    left: -80px;
+    top: -80px;
+}
+.shape:last-child{
+    background: linear-gradient(
+        to right,
+        #ff512f,
+        #f09819
+    );
+    right: -30px;
+    bottom: -80px;
+}
+form{
+    height: 700px;
+    width: 450px;
+    background-color: rgba(255,255,255,0.13);
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    padding: 50px 35px;
+}
+form *{
+    font-family: 'Poppins',sans-serif;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+}
+form h3{
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 42px;
+    text-align: center;
+}
+
+label{
+    display: block;
+    margin-top: 30px;
+    font-size: 16px;
+    font-weight: 500;
+}
+input{
+    display: block;
+    height: 40px;
+    width: 100%;
+    background-color: rgba(255,255,255,0.07);
+    border-radius: 3px;
+    padding: 0 10px;
+    margin-top: 2px;
+    font-size: 14px;
+    font-weight: 300;
+}
+::placeholder{
+    color: #e5e5e5;
+}
+button{
+    margin-top: 14px;
+    width: 100%;
+    background-color: #ffffff;
+    color: #080710;
+    padding: 9px 0;
+    font-size: 19px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.social{
+  margin-top: 30px;
+  display: flex;
+}
+.social div{
+  background: red;
+  width: 150px;
+  border-radius: 3px;
+  padding: 5px 10px 10px 5px;
+  background-color: rgba(255,255,255,0.27);
+  color: #eaf0fb;
+  text-align: center;
+}
+.social div:hover{
+  background-color: rgba(255,255,255,0.47);
+}
+.social .fb{
+  margin-left: 25px;
+}
+.social i{
+  margin-right: 4px;
+}
+
+    </style>
+
+</head>
+<body>
+    <div class="background">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    <form action="{% url "signup" %}" method="post" id="signupForm">
+        {% csrf_token %} 
+        <h3>Signup Here</h3>
+        
+
+        <label for="username">Username</label>
+        <input type="text" placeholder="Username" name="username" id="username">
+        <span id="usernameError" class="error"></span>
+
+        <label for="email">Email</label>
+        <input type="email" placeholder="Email" name="email" id="email">
+        <span id="emailError" class="error"></span>
+
+        <label for="phone">Phone</label>
+        <input type="phone" placeholder="Phone no" name="phone" id="phone">
+        <span id="phoneError" class="error"></span>
+
+        <label for="password1">Password</label>
+        <input type="password" placeholder="Password" id="password1" name="password1">
+        <span id="passwordError" class="error"></span>
+
+
+        <label for="password2">Confrom Password</label>
+        <input type="password" placeholder="Confrom Password" id="password2" name="password2">
+        <span id="passwordError" class="error"></span>
+
+        <h4 class="error" style="color:red ; text-align:center ;">{{error_message}}</h4>
+        
+
+        <button type="submit">Signup</button>
+
+        <a href="{% url 'login' %}" >i have already account</a>
+    </form>
+{% comment %} validation {% endcomment %}
+    {% comment %} <script>
+        const form = document.getElementById('signupForm');
+        const username = document.getElementById('username');
+        const email = document.getElementById('email');
+        const phone = document.getElementById('phone');
+        const password = document.getElementById('password1');
+        const password = document.getElementById('password2');
+        form.addEventListener('submit', function (event) {
+            let valid = true;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneRegex = /^\d{10}$/;
+
+            // Reset any previous error messages
+            document.querySelectorAll('.error').forEach(function (error) {
+                error.textContent = '';
+            });
+
+            if (username.value.trim() === '') {
+                valid = false;
+                document.getElementById('usernameError').textContent = 'Username is required.';
+            }
+
+            if (!email.value.match(emailRegex)) {
+                valid = false;
+                document.getElementById('emailError').textContent = 'Email is not valid.';
+            }
+
+            if (!phone.value.match(phoneRegex)) {
+                valid = false;
+                document.getElementById('phoneError').textContent = 'Phone number is not valid (10 digits).';
+            }
+
+            if (password1.value.length < 8) {
+                valid = false;
+                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long.';
+            }
+            if (password1.value.length < 8) {
+                valid = false;
+                document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long.';
+            }
+
+            if (!valid) {
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+    </script>
+
+</body>
+</html>  {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Design by foolishdeveloper.com -->
+    <title>Signup Page</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <!--Stylesheet-->
+    <style media="screen">
+        *,
+        *:before,
+        *:after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #080710;
+        }
+
+        .background {
+            width: 430px;
+            height: 520px;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: 50%;
+        }
+
+        .background .shape {
+            height: 200px;
+            width: 200px;
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .shape:first-child {
+            background: linear-gradient(#1845ad, #23a2f6);
+            left: -80px;
+            top: -80px;
+        }
+
+        .shape:last-child {
+            background: linear-gradient(to right, #ff512f, #f09819);
+            right: -30px;
+            bottom: -80px;
+        }
+
+        form {
+            height: 700px;
+            width: 500px;
+            background-color: rgba(255, 255, 255, 0.13);
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+            padding: 50px 35px;
+        }
+
+        form * {
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            letter-spacing: 0.6px;
+            outline: none;
+            border: none;
+        }
+
+        form h3 {
+            font-size: 28px;
+            font-weight: 500;
+            line-height: 5px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 30px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        input {
+            display: block;
+            height: 40px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.07);
+            border-radius: 3px;
+            padding: 0 10px;
+            margin-top: 2px;
+            font-size: 14px;
+            font-weight: 300;
+        }
+
+        ::placeholder {
+            color: #e5e5e5;
+        }
+
+        button {
+            margin-top: 35px;
+            width: 100%;
+            background-color: #ffffff;
+            color: #080710;
+            padding: 9px 0;
+            font-size: 19px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .social {
+            margin-top: 30px;
+            display: flex;
+        }
+
+        .social div {
+            background: red;
+            width: 150px;
+            border-radius: 3px;
+            padding: 5px 10px 10px 5px;
+            background-color: rgba(255, 255, 255, 0.27);
+            color: #eaf0fb;
+            text-align: center;
+        }
+
+        .social div:hover {
+            background-color: rgba(255, 255, 255, 0.47);
+        }
+
+        .social .fb {
+            margin-left: 25px;
+        }
+
+        .social i {
+            margin-right: 4px;
+        }
+
+        
+
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
+</div>
+<form action="{% url "signup" %}" method="post" id="signupForm">
+    {% csrf_token %}
+    <h3>Signup Here</h3>
+
+    <label for="username">Username</label>
+    <input type="text" placeholder="Username" name="username" id="username">
+    <h4><span id="usernameError" class="error" style="color: red; text-align: center;"></span></h4>
+
+    <label for="email">Email</label>
+    <input type="email" placeholder="Email" name="email" id="email">
+    <h4><span id="emailError" class="error" style="color: red; text-align: center;"></span></h4>
+
+    <label for="phone">Phone</label>
+    <input type="tel" placeholder="Phone no" name="phone" id="phone">
+    <h4><span id="phoneError" class="error" style="color: red; text-align: center;"></span></h4>
+
+    <label for="password1">Password</label>
+    <input type="password" placeholder="Password" id="password1" name="password1">
+    <h4><span id="passwordError" class="error" style="color: red; text-align: center;"></span></h4>
+
+    <label for="password2">Confirm Password</label>
+    <input type="password" placeholder="Confirm Password" id="password2" name="password2">
+    <h4><span id="password2Error" class="error" style="color: red; text-align: center;"></span></h4>
+
+    <h4 class="error" style="color: red; text-align: center;">{{ error_message }}</h4>
+
+    <button type="submit">Signup</button>
+    <a href="{% url 'login' %}" >I already have an account</a>
+</form>
+
+
+
+<script>
+    $(document).ready(function() {
+        $('#signupForm').submit(function(event) {
+            // Reset any previous error messages
+            $('.error').text('');
+    
+            // Valid flag to check the overall validity of the form
+            let valid = true;
+    
+            // Regular expressions for email and password
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const passwordRegex = /^.{8,}$/;
+    
+            // Validate the username
+            if ($('#username').val().trim() === '') {
+                valid = false;
+                $('#usernameError').text('Username is required.');
+            }
+    
+            // Validate the email
+            if (!emailRegex.test($('#email').val())) {
+                valid = false;
+                $('#emailError').text('Email is not valid.');
+            }
+    
+            // Validate the phone (assuming it should have 10 digits)
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test($('#phone').val())) {
+                valid = false;
+                $('#phoneError').text('Phone number is not valid (10 digits required).');
+            }
+    
+            // Validate the first password
+            if (!passwordRegex.test($('#password1').val())) {
+                valid = false;
+                $('#passwordError').text('Password must be at least 8 characters long.');
+            }
+    
+            // Validate the second password
+            if ($('#password1').val() !== $('#password2').val()) {
+                valid = false;
+                $('#password2Error').text('Passwords do not match.');
+            }
+    
+            // If not valid, prevent form submission
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+    });
+    </script>
+
+
+</body>
+</html>

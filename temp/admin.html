@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+    <!-- Add Bootstrap CSS link here -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Add your custom CSS if needed -->
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 100px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <div class="login-container">
+            <h2 class="text-center">Admin Login</h2>
+            <form action="{% url 'adminlogin' %}" method="POST" id="adminloginForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                    <h6><span id="usernameError" class="error" style="color: red; text-align: center;"></span></h6>
+
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                    <h6><span id="passwordError" class="error" style="color: red; text-align: center;"></span></h6>
+
+                </div>
+                {% if error %}
+                <h5  align="center" style="color:red;">{{error}}</h5>
+                {% endif %}
+                <button type="submit" class="btn btn-primary">Log In</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#adminloginForm').submit(function(event) {
+                // Reset any previous error messages
+                $('.error').text('');
+        
+                // Valid flag to check the overall validity of the form
+                let valid = true;
+            
+                // Regular expressions for email and password
+                
+                const passwordRegex = /^.{8,}$/;
+        
+                // Validate the username
+                if ($('#username').val().trim() === '') {
+                    valid = false;
+                    $('#usernameError').text('Username is required.');
+                }
+        
+                
+                
+                // Validate the  password
+                if (!passwordRegex.test($('#password').val())) {
+                    valid = false;
+                    $('#passwordError').text('Password must be at least 8 characters long.');
+                }
+        
+                
+        
+                // If not valid, prevent form submission
+                if (!valid) {
+                    event.preventDefault();
+                }
+            });
+        });
+        </script>
+    <!-- Add Bootstrap and jQuery JavaScript links here -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
